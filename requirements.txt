@@ -1,0 +1,7 @@
+flask
+requests
+keras
+tensorflow_hub
+roboflow
+ultralytics==8.1.5
+pillow

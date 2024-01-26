@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>{{ page['title'] }}</title>
+    <meta name="description" content="{{ page['title'] }} của Nguyễn Kim Bảo">
+    <meta name="keywords" content="Python, Keras, Tensorflow, Image Classification, Kaggle">
+    <meta name="author" content="Nguyễn Kim Bảo (BaoIT)">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.1/apexcharts.min.css">
+</head>
+<body>
+<div class="container-fluid d-flex max-vh-100 max-vw-100 justify-content-between">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-5 col-sm-12">
+                <p class="text-danger fw-bold text-center pt-2 pb-1" style="font-size: 28px;margin: 0;">
+                    {{ page['title'] }}
+                </p>
+                <p class="text-center text-secondary">&copy; {{ page['copyright'] }}</p>
+                <p class="text-center pb-1">=> Trained on Dataset: <a
+                        href="{{ page['dataset_url'] }}"
+                        class="text-decoration-none" target="_blank">{{ page['dataset_name'] }}</a> <=</p>
+                <form id="f_DuDoan" action="{{ page['project_url'] }}" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <input type="file" class="form-control" name="file" id="file" required/>
+                        </div>
+                        <div class="col-auto">
+                            <button id="Submit_DuDoan" class="g-recaptcha btn btn-primary"
+                                    data-sitekey="{{ page['SITE_KEY'] }}"
+                                    data-callback='onSubmit'
+                                    data-action='submit'>Dự đoán
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <img id="Show_Image" class="pt-4 img-fluid" src="{{ page['image'] }}" width="100%" height="100%" alt=""
+                     loading="lazy"/>
+                <p class="text-danger fw-bold text-center pt-3" style="font-size: 17px;">Giá trị dự
+                    đoán: {{ page['result'] }}
+                    (Acc: {{ page['acc'] }}% | Loss: {{ page['loss'] }}%)</p>
+                <div class="row justify-content-center">
+                    <div class="col-3">
+                        <hr>
+                    </div>
+                    <div class="col-auto p-0">
+                        <a id="Xem_Them" href="#" class="text-decoration-none text-secondary scroll-down"
+                           style="font-size: 13px;"
+                           data-bs-toggle="collapse" data-bs-target="#Chart_Zone">
+                            Xem thêm
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-caret-down" viewBox="0 0 16 16">
+                                <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <hr>
+                    </div>
+                </div>
+                <div id="Chart_Zone" class="collapse">
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<plugins>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.1/apexcharts.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?trustedtypes=true" async defer></script>
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        function onSubmit() {
+            let applicationForm = document.getElementById("f_DuDoan");
+            if (applicationForm.checkValidity()) {
+                document.getElementById("f_DuDoan").submit();
+                document.getElementById("Show_Image").setAttribute("src", "https://baoit.xyz/assets/ico/loading_ai.gif");
+            } else {
+                applicationForm.reportValidity();
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Xem_them
+            $('.scroll-down').click(function () {
+                let x = $(window).scrollTop();
+                $('html, body').animate({scrollTop: x + 600})
+            });
+            // Chart
+            let chart_data = JSON.parse('{{ page['val_acc'] | tojson | safe }}');
+            let options = {
+                noData: {
+                    text: 'Không có dữ liệu !',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                },
+                series: [{
+                    name: 'Accuracy', data: chart_data['data']
+                }], chart: {
+                    type: 'bar', height: 350
+                }, plotOptions: {
+                    bar: {
+                        horizontal: false, columnWidth: '55%', endingShape: 'rounded'
+                    },
+                }, dataLabels: {
+                    enabled: false
+                }, stroke: {
+                    show: true, width: 2, colors: ['transparent']
+                }, xaxis: {
+                    categories: chart_data['label'], title: {
+                        text: 'Labels'
+                    }
+                }, yaxis: {
+                    title: {
+                        text: '% (Accuracy)', fontFamily: 'Arial'
+                    },
+                    min: 0,
+                    max: 100,
+                    decimalsInFloat: 0
+
+                }, fill: {
+                    opacity: 1
+                }, tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + "%"
+                        }
+                    }
+                }
+            };
+            new ApexCharts(document.querySelector("#chart"), options).render();
+        });
+    </script>
+</plugins>
+</body>
+</html>
