@@ -42,9 +42,8 @@ class TFDefault:
 		self.img_save_loc = f'/imgs/{tf_model_name}'
 		if not os.path.exists(self.img_save_loc):
 			os.mkdir(self.img_save_loc)
-		self.model_save_loc = f'/models_h5'
 		self.img_save_path = f'{self.img_save_loc}/{img_save_path}'
-		self.tf_model_path = f'{self.model_save_loc}/{tf_model_name}_model.h5'
+		self.tf_model_path = f'/models_h5/{tf_model_name}_model.h5'
 		self.custom_object = custom_objects
 		self.class_names = class_names
 		self.img_size = img_size

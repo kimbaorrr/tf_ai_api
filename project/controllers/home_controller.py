@@ -6,7 +6,7 @@ from project import app
 
 projects = {
 	'age': [],
-	'brain-tumor': sorted(['No', 'Yes']),
+	'brain_tumor': sorted(['No', 'Yes']),
 	'lung_cancer': sorted(['Adenocarcinomas', 'Benign', 'Squamous cell carcinomas']),
 	'covid_19': sorted(['COVID', 'Non-COVID']),
 	'monkeys': sorted(['Bald Uakari', 'Emperor Tamarin', 'Mandril', 'Proboscis Monkey', 'White face saki']),
