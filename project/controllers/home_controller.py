@@ -1,8 +1,8 @@
 import random
 
 from flask import abort, jsonify, request
-
 from project.models.prediction import *
+from project import app
 
 projects = {
 	'age': [],
@@ -160,4 +160,3 @@ def pred_output():
 			return jsonify(output)
 		case _:
 			abort(404)
-
