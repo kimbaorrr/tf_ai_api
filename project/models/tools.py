@@ -1,9 +1,6 @@
-from datetime import datetime as dt
-
 import numpy as np
 from keras.utils import img_to_array
 from PIL import Image as pil
-from pybase64 import b64encode
 
 from project.models.logs import log_errors
 

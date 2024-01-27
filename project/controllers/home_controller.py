@@ -29,7 +29,7 @@ def pred_output():
 			pred = TimeOfDay(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -48,7 +48,7 @@ def pred_output():
 			pred = BrainTumor(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -67,7 +67,7 @@ def pred_output():
 			pred = LungCancer(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -86,7 +86,7 @@ def pred_output():
 			pred = Covid(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -105,7 +105,7 @@ def pred_output():
 			pred = Monkeys(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -124,7 +124,7 @@ def pred_output():
 			pred = TyreQuality(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{
@@ -143,7 +143,7 @@ def pred_output():
 			pred = SkinDisease(
 				file_path,
 				classes,
-				f'{p_key}_model'
+				p_key
 			).tf_results
 			output.update(
 				{

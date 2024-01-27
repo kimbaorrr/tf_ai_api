@@ -1,7 +1,8 @@
+numpy==1.24.3
 flask
-requests
-keras
+tensorflow==2.13.0
 tensorflow_hub
 roboflow
 ultralytics==8.1.5
 pillow
+

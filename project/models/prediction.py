@@ -1,15 +1,11 @@
-import functools
 import os
 
-import cv2 as cv
 import numpy as np
 import requests
-import keras
 import tensorflow_hub as hub
 from keras.models import load_model
 from roboflow import Roboflow
-from ultralytics import YOLO
-from server import app
+
 from project.models.logs import log_errors
 from project.models.tools import image_processing
 
@@ -43,22 +39,22 @@ class TFDefault:
 			custom_objects=False,
 			img_size=(224, 224)
 	):
-		self.img_save_loc = f'/imgs'
+		self.img_save_loc = f'/imgs/{tf_model_name}'
+		if not os.path.exists(self.img_save_loc):
+			os.mkdir(self.img_save_loc)
 		self.model_save_loc = f'/models_h5'
 		self.img_save_path = f'{self.img_save_loc}/{img_save_path}'
-		self.tf_model_name = f'{self.model_save_loc}/{tf_model_name}.h5'
+		self.tf_model_path = f'{self.model_save_loc}/{tf_model_name}_model.h5'
 		self.custom_object = custom_objects
 		self.class_names = class_names
 		self.img_size = img_size
 		self.tf_results = None
 
 		try:
-			# Thiết lập chung
-			tf_model_loc = os.path.join(model_loc, self.tf_model_name)
 			# Nạp mô hình
 			model = load_model(
-				tf_model_loc, custom_objects={'KerasLayer': hub.KerasLayer}
-			) if self.custom_object else load_model(tf_model_loc)
+				self.tf_model_path, custom_objects={'KerasLayer': hub.KerasLayer}
+			) if self.custom_object else load_model(self.tf_model_path)
 			# Xử lý ảnh đầu vào
 			output_img = image_processing(self.img_save_path, self.img_size)
 			# Dự đoán giá trị ảnh
